@@ -1,0 +1,20 @@
+Description: CloudFormation template for initializing AWS groups
+Resources:
+  AdminUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: AdminUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  StandardUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: StandardUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  ReadOnlyUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: ReadOnlyUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess

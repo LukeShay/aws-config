@@ -1,8 +1,11 @@
 
-.PHONY: init
+.PHONY: init lint
 
 init:
 	npm i -g cfn-lint
 
 lint:
-	cfn-lint validate cloudformation.template.yml
+	for T in $(shell find templates -mindepth 1 -maxdepth 1); do \
+		echo $$T ; \
+		cfn-lint validate $$T ; \
+	done \
