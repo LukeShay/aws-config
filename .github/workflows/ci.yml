@@ -20,10 +20,10 @@ jobs:
         with:
           name: AWSAccountGroupsConfig
           template: templates/groups.template.yml
-          capabilities: [CAPABILITY_IAM, CAPABILITY_NAMED_IAM]
+          capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
       - name: Deploy AWSAccountPasswordPolicyConfig to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: AWSAccountPasswordPolicyConfig
           template: templates/password.template.yml
-          capabilities: [CAPABILITY_IAM, CAPABILITY_NAMED_IAM]
+          capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
