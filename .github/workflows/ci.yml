@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   update:
+    name: Deploy to CloudFormation
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -16,9 +17,9 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: AWSAccountGroupsConfig
-          template: ./templates/groups.template.yml
+          template: ../templates/groups.template.yml
       - name: Deploy AWSAccountPasswordPolicyConfig to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: AWSAccountPasswordPolicyConfig
-          template: ./templates/password.template.yml
+          template: ../templates/password.template.yml
