@@ -16,9 +16,9 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: AWSAccountGroupsConfig
-          template: templates/groups.template.yaml
+          template: templates/groups.template.yml
       - name: Deploy AWSAccountPasswordPolicyConfig to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: AWSAccountPasswordPolicyConfig
-          template: templates/password.template.yaml
+          template: templates/password.template.yml
