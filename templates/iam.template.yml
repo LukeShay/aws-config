@@ -1,0 +1,66 @@
+Description: CloudFormation template for initializing AWS IAM
+Parameters:
+  DefaultPassword:
+    Type: String
+    Description: The default password for new users
+    Default: 2TS(Qgsm5qm9m(bkXbP|fW98
+Resources:
+  AdminUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: AdminUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  StandardUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: StandardUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+  ReadOnlyUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: ReadOnlyUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+  GithubCloudFormationUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: GithubCloudFormationUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+  LukeShay:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: lukeshay
+      Groups:
+        - !Ref AdminUserGroup
+      LoginProfile:
+        Password: !Ref DefaultPassword
+    DependsOn: AdminUserGroup
+  GithubCloudFormationUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: github-cloudformation-user
+      Groups:
+        - !Ref GithubCloudFormationUserGroup
+    DependsOn: GithubCloudFormationUserGroup
+  GithubCloudFormationUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref GithubCloudFormationUser
+      Status: Inactive
+    DependsOn: GithubCloudFormationUser
+Outputs:
+  TemplateID:
+    Description: "Template id."
+    Value: "security/account-password-policy"
+  TemplateVersion:
+    Description: "Template version."
+    Value: "__VERSION__"
+  StackName:
+    Description: "Stack name."
+    Value: !Sub "${AWS::StackName}"

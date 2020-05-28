@@ -1,8 +1,0 @@
-Description: CloudFormation template for initializing AWS users
-Resources:
-  LukeShay:
-    Type: AWS::IAM::User
-    Properties:
-      Groups:
-        - AdminUserGroup
-      Username: lukeshay

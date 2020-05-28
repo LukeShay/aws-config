@@ -8,7 +8,7 @@ Password: %vM$PL4<s:P7,iX
 Access key: AKIA34CE2GW3J254BWYS
 Secret key: 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
 
-## github-cloudformation-user
-Access key: AKIA34CE2GW3KGTR7PHZ
-Secret key: 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
+## github-aws-config-user
+Access key: AKIA34CE2GW3FKOJVZVA
+Secret key: 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
 

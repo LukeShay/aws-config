@@ -2,8 +2,16 @@ name: lukeshay-web continuous integration
 on: [push]
 
 jobs:
-  update:
-    name: Deploy to CloudFormation
+  lint:
+    name: Lint templates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Lint
+        runs: make lint
+  update-groups:
+    name: Deploy AWSAccountGroupsConfig CloudFormation
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -21,9 +29,22 @@ jobs:
           name: AWSAccountGroupsConfig
           template: templates/groups.template.yml
           capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
-      - name: Deploy AWSAccountPasswordPolicyConfig to AWS CloudFormation
+  update-password-policy:
+    name: Deploy AWSAccountIAMConfig CloudFormation
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy AWSAccountIAMConfig to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: AWSAccountPasswordPolicyConfig
+          name: AWSAccountIAMConfig
           template: templates/password.template.yml
           capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
