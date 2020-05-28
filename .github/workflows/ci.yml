@@ -14,6 +14,14 @@ jobs:
           node-version: "12.16"
       - name: Lint
         run: make init && make lint
+      - name: CFN nag AWSAccountIAMConfig
+        uses: stelligent/cfn_nag@master
+        with:
+          input_path: templates/iam.template.yml
+      - name: CFN nag AWSAccountPasswordPolicyConfig
+        uses: stelligent/cfn_nag@master
+        with:
+          input_path: templates/password.template.yml
   update-iam:
     name: Deploy AWSAccountIAMConfig CloudFormation
     if: github.ref == 'refs/heads/master'
