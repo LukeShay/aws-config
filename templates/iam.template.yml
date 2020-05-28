@@ -40,6 +40,7 @@ Resources:
         - !Ref AdminUserGroup
       LoginProfile:
         Password: !Ref DefaultPassword
+        PasswordResetRequired: true
     DependsOn: AdminUserGroup
   GithubCloudFormationUser:
     Type: AWS::IAM::User
