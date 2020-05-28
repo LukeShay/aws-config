@@ -1,32 +1,23 @@
 Description: CloudFormation template for initializing AWS IAM
-Parameters:
-  DefaultPassword:
-    Type: String
-    Description: The default password for new users
-    Default: 2TS(Qgsm5qm9m(bkXbP|fW98
 Resources:
   AdminUserGroup:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: AdminUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
   StandardUserGroup:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: StandardUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
   ReadOnlyUserGroup:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: ReadOnlyUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
   GithubCloudFormationUserGroup:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: GithubCloudFormationUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
         - arn:aws:iam::aws:policy/AWSLambdaFullAccess
@@ -39,7 +30,7 @@ Resources:
       Groups:
         - !Ref AdminUserGroup
       LoginProfile:
-        Password: !Ref DefaultPassword
+        Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
         PasswordResetRequired: true
     DependsOn: AdminUserGroup
   GithubCloudFormationUser:
