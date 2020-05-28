@@ -9,7 +9,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Lint
-        runs: make lint
+        run: make lint
   update-groups:
     name: Deploy AWSAccountGroupsConfig CloudFormation
     if: github.ref == 'refs/heads/master'
@@ -29,7 +29,7 @@ jobs:
           name: AWSAccountGroupsConfig
           template: templates/groups.template.yml
           capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
-  update-password-policy:
+  update-iam:
     name: Deploy AWSAccountIAMConfig CloudFormation
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
