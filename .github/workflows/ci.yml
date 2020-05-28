@@ -8,8 +8,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16"
       - name: Lint
-        runs: make lint
+        run: make init && make lint
   update-iam:
     name: Deploy AWSAccountIAMConfig CloudFormation
     if: github.ref == 'refs/heads/master'
