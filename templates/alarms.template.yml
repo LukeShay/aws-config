@@ -10,7 +10,7 @@ Resources:
     Properties:
       DisplayName: AlarmSNSTopic
       Subscription:
-        - Enpoint: shay.luke17+aws@gmail.com
+        - Endpoint: shay.luke17+aws@gmail.com
           Protocol: EMAIL
   SpendingAlarm:
     Type: AWS::CloudWatch::Alarm
