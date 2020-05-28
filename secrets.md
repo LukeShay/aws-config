@@ -6,7 +6,7 @@ https://luke-shay.signin.aws.amazon.com/console
 
 ## lukeshay
 
-Password: 2TS(Qgsm5qm9m(bkXbP|fW98
+Password: 6YDSagi-{mMT
 Access key: AKIA34CE2GW3J254BWYS
 Secret key: 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
 
