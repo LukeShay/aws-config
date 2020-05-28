@@ -2,7 +2,7 @@ Description: CloudFormation template for initializing CloudWatch Alarms
 Parameters:
   SpendingAlarmThreshold:
     Description: "The threshold to trigger the spending alarm."
-    Type: double
+    Type: Number
     Default: 20
 Resources:
   AlarmSNSTopic:
