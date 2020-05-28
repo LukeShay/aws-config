@@ -19,7 +19,7 @@ Resources:
         "Fn::Join":
           - ""
           - - Alarm if AWS spending is over $
-            - Ref: AlarmThreshold
+            - Ref: SpendingAlarmThreshold
       Namespace: AWS/Billing
       MetricName: EstimatedCharges
       Dimensions:
