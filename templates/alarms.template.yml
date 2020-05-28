@@ -30,4 +30,5 @@ Resources:
       EvaluationPeriods: "1"
       Threshold: !Ref SpendingAlarmThreshold
       ComparisonOperator: GreaterThanOrEqualThreshold
-      AlarmActions: !Ref AlarmSNSTopic
+      AlarmActions:
+        - !Ref AlarmSNSTopic
