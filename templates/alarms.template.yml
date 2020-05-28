@@ -1,0 +1,33 @@
+Description: CloudFormation template for initializing CloudWatch Alarms
+Parameters:
+  SpendingAlarmThreshold:
+    Description: "The threshold to trigger the spending alarm."
+    Type: double
+    Default: 20
+Resources:
+  AlarmSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: AlarmSNSTopic
+      Subscription:
+        - Enpoint: shay.luke17+aws@gmail.com
+          Protocol: EMAIL
+  SpendingAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription:
+        "Fn::Join":
+          - ""
+          - - Alarm if AWS spending is over $
+            - Ref: AlarmThreshold
+      Namespace: AWS/Billing
+      MetricName: EstimatedCharges
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      Statistic: Maximum
+      Period: "21600"
+      EvaluationPeriods: "1"
+      Threshold: !Ref SpendingAlarmThreshold
+      ComparisonOperator: GreaterThanOrEqualThreshold
+      AlarmActions: !Ref AlarmSNSTopic
