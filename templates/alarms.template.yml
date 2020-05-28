@@ -29,5 +29,5 @@ Resources:
       Period: "21600"
       EvaluationPeriods: "1"
       Threshold: !Ref SpendingAlarmThreshold
-      ComparisonOperator: GreaterThanOrEqualThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
       AlarmActions: [!Ref AlarmSNSTopic]
