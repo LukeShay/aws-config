@@ -1,0 +1,11 @@
+description
+Resources:
+  StandardKMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: String
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy: Json
+      KeyUsage: String
+      PendingWindowInDays: Integer

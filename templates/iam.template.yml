@@ -40,12 +40,6 @@ Resources:
       Groups:
         - !Ref GithubCloudFormationUserGroup
     DependsOn: GithubCloudFormationUserGroup
-  GithubCloudFormationUserAccessKey:
-    Type: AWS::IAM::AccessKey
-    Properties:
-      UserName: !Ref GithubCloudFormationUser
-      Status: Inactive
-    DependsOn: GithubCloudFormationUser
 Outputs:
   TemplateID:
     Description: "Template id."
