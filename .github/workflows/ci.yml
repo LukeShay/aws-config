@@ -52,7 +52,7 @@ jobs:
           name: AWSAccountPasswordPolicyConfig
           template: templates/password.template.yml
           capabilities: CAPABILITY_IAM, CAPABILITY_NAMED_IAM
-          no-fail-on-empty-changeset: 1]
+          no-fail-on-empty-changeset: 1
       - name: Deploy AWSAccountAlarmsConfig to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
