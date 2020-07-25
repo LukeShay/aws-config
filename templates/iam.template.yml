@@ -210,7 +210,7 @@ Resources:
               - s3:PutBucketWebsite
               - s3:PutBucketAcl
               - s3:PutObjectAcl
-          Resource: "*"
+            Resource: "*"
 
   GithubCloudFormationUserGroup:
     Type: AWS::IAM::Group
