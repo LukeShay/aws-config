@@ -212,7 +212,7 @@ Resources:
               - s3:PutObjectAcl
             Resource: "*"
 
-  GithubCloudFormationUserGroup:
+  GithubUserGroup:
     Type: AWS::IAM::Group
     Properties:
       ManagedPolicyArns:
@@ -230,13 +230,13 @@ Resources:
         Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
         PasswordResetRequired: true
     DependsOn: AdminUserGroup
-  GithubCloudFormationUser:
+  GithubUser:
     Type: AWS::IAM::User
     Properties:
-      UserName: github-cloudformation-user
+      UserName: github-user
       Groups:
-        - !Ref GithubCloudFormationUserGroup
-    DependsOn: GithubCloudFormationUserGroup
+        - !Ref GithubUserGroup
+    DependsOn: GithubUserGroup
   AmplifyUser:
     Type: AWS::IAM::User
     Properties:
