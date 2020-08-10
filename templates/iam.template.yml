@@ -15,6 +15,18 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
+      PolicyDocument:
+      Version: 2012-10-17
+      Statement:
+        - Effect: Deny
+          Resource: "*"
+          Action:
+            - aws-portal:*
+            - cur:*
+            - budgets:*
+            - ce:*
+            - pricing:*
+            - purchase-orders:*
   AmplifyUserGroup:
     Type: AWS::IAM::Group
   AmplifyUserPolicy:
@@ -230,6 +242,16 @@ Resources:
         Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
         PasswordResetRequired: true
     DependsOn: AdminUserGroup
+  TylerKrueger:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: tylerkrueger
+      Groups:
+        - !Ref ReadOnlyUserGroup
+      LoginProfile:
+        Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
+        PasswordResetRequired: true
+    DependsOn: ReadOnlyUserGroup
   GithubUser:
     Type: AWS::IAM::User
     Properties:
