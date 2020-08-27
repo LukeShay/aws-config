@@ -125,7 +125,7 @@ jobs:
                 --capabilities CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-iam-stack:
-    name: Deploy IAM CloudFormation stack
+    name: Deploy LTP IAM CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
@@ -153,7 +153,7 @@ jobs:
                 --capabilities CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-password-policy-stack:
-    name: Deploy Password Policy CloudFormation stack
+    name: Deploy LTP Password Policy CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
@@ -181,7 +181,7 @@ jobs:
                 --capabilities CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-alarms-stack:
-    name: Deploy Alarms CloudFormation stack
+    name: Deploy LTP Alarms CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
@@ -194,8 +194,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Packaging $STACK_NAME
         run: |
@@ -209,7 +209,7 @@ jobs:
                 --capabilities CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-lambdas-stack:
-    name: Deploy Lambdas CloudFormation stack
+    name: Deploy LTP Lambdas CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
