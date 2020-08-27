@@ -1,0 +1,60 @@
+Description: Custom lambdas
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+                - cloudformation:DescribeStacks
+                - cloudformation:ListExports
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: "*"
+  ModulesLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ../lambdas/layer
+  SubImportValues:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SubImportValues
+      Runtime: nodejs12.x
+      Handler: subValues.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 10
+      CodeUri: ../lambdas/src
+      Layers:
+        - !Ref ModulesLambdaLayer
+  SubImportValuesPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: SubImportValues
+    Properties:
+      FunctionName: SubImportValues
+      Action: lambda:InvokeFunction
+      Principal: cloudformation.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+Outputs:
+  SubImportValuesArn:
+    Description: The ARN of SubImportValues
+    Value: !GetAtt SubImportValues.Arn
+    Export:
+      Name: SubImportValues-Arn
