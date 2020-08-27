@@ -38,7 +38,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-password-policy-stack:
     name: Deploy Password Policy CloudFormation stack
@@ -66,7 +66,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-alarms-stack:
     name: Deploy Alarms CloudFormation stack
@@ -94,7 +94,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-lambdas-stack:
     name: Deploy Lambdas CloudFormation stack
@@ -122,7 +122,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-iam-stack:
     name: Deploy LTP IAM CloudFormation stack
@@ -150,7 +150,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-password-policy-stack:
     name: Deploy LTP Password Policy CloudFormation stack
@@ -178,7 +178,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-alarms-stack:
     name: Deploy LTP Alarms CloudFormation stack
@@ -206,7 +206,7 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-lambdas-stack:
     name: Deploy LTP Lambdas CloudFormation stack
@@ -234,5 +234,5 @@ jobs:
         run: |
               aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
                 --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_IAM \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
