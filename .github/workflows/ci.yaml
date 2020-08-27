@@ -228,7 +228,7 @@ jobs:
       - name: Packaging $STACK_NAME
         run: |
               aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
+                --s3-bucket luketyler-build-bucket \
                 --output-template-file $PACKAGED_TEMPLATE
       - name: Deploying $STACK_NAME
         run: |
