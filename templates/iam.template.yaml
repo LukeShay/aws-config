@@ -268,7 +268,6 @@ Resources:
       LoginProfile:
         Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
         PasswordResetRequired: true
-    DependsOn: AdminUserGroup
   TylerKrueger:
     Type: AWS::IAM::User
     Properties:
@@ -278,21 +277,18 @@ Resources:
       LoginProfile:
         Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
         PasswordResetRequired: true
-    DependsOn: ReadOnlyUserGroup
   GithubUser:
     Type: AWS::IAM::User
     Properties:
       UserName: github-user
       Groups:
         - !Ref GithubUserGroup
-    DependsOn: GithubUserGroup
   AmplifyUser:
     Type: AWS::IAM::User
     Properties:
       UserName: amplify-user
       Groups:
         - !Ref AmplifyUserGroup
-    DependsOn: AmplifyUserGroup
 Outputs:
   TemplateID:
     Description: "Template id."

@@ -22,8 +22,8 @@ Resources:
         - Name: Currency
           Value: USD
       Statistic: Maximum
-      Period: "21600"
-      EvaluationPeriods: "1"
+      Period: 21600
+      EvaluationPeriods: 1
       Threshold: !Ref SpendingAlarmThreshold
       ComparisonOperator: GreaterThanOrEqualToThreshold
       AlarmActions: [!Ref AlarmSNSTopic]
