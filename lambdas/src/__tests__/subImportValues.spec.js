@@ -1,4 +1,4 @@
-const lambda = require("../subValues");
+const lambda = require("../subImportValues");
 const response = require("cfn-response-promise");
 
 jest.mock("cfn-response-promise", () => ({

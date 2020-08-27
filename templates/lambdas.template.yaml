@@ -38,7 +38,7 @@ Resources:
     Properties:
       FunctionName: SubImportValues
       Runtime: nodejs12.x
-      Handler: subValues.handler
+      Handler: subImportValues.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Timeout: 10
       CodeUri: ../lambdas/src
