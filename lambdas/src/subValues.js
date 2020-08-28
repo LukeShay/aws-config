@@ -3,6 +3,19 @@ const response = require("cfn-response-promise");
 
 const cloudformation = new CloudFormation({ region: process.env.AWS_REGION });
 
+const getValue = (value, exportsObject, resourceProps, subName) => {
+  let ret;
+  if (value.includes("${Import::")) {
+    ret = exportsObject[subName];
+  } else {
+    ret = resourceProps[subName];
+  }
+
+  if (!ret) throw `Missing sub: ${subName}`;
+
+  return ret;
+};
+
 exports.handler = async (event, context) => {
   if (!event || !event.ResourceProperties || !event.ResourceProperties.Value) {
     return await response.send(event, context, response.FAILED);
@@ -29,11 +42,7 @@ exports.handler = async (event, context) => {
 
       resourceValue = resourceValue
         .split(value)
-        .join(
-          value.includes("${Import::")
-            ? exportsObject[subName]
-            : event.ResourceProperties[subName]
-        );
+        .join(getValue(value, exportsObject, event.ResourceProperties, subName));
     });
 
     await response.send(
