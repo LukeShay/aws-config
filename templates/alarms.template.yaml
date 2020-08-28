@@ -30,12 +30,15 @@ Resources:
   TestCustom:
     Type: Custom::TestCustom
     Properties:
-      ServiceToken: !ImportValue SubImportValues-Arn
-      Value: "${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIID}"
+      ServiceToken: !ImportValue SubValues-Arn
+      Value: "${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIID} ${SpendingAlarmThreshold}"
+      SpendingAlarmThreshold: !Ref SpendingAlarmThreshold
 Outputs:
-  SubImportValues:
-    Description: SubImportValues test
-    Value: !GetAtt TestCustom.Plaintext
-  SubImportValuesRef:
-    Description: SubImportValues test
+  SubValues:
+    Description: SubValues test
+    Value:
+      Fn::Sub:
+        - !GetAtt TestCustom.Plaintext
+  SubValuesRef:
+    Description: SubValues test
     Value: !Ref TestCustom

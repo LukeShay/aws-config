@@ -14,8 +14,6 @@ Resources:
             - lambda.amazonaws.com
           Action:
             - sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
       Policies:
         - PolicyName: root
           PolicyDocument:
@@ -33,28 +31,28 @@ Resources:
     Type: AWS::Serverless::LayerVersion
     Properties:
       ContentUri: ../lambdas/layer
-  SubImportValues:
+  SubValues:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: SubImportValues
+      FunctionName: SubValues
       Runtime: nodejs12.x
-      Handler: subImportValues.handler
+      Handler: SubValues.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Timeout: 10
       CodeUri: ../lambdas/src
       Layers:
         - !Ref ModulesLambdaLayer
-  SubImportValuesPermission:
+  SubValuesPermission:
     Type: AWS::Lambda::Permission
-    DependsOn: SubImportValues
+    DependsOn: SubValues
     Properties:
-      FunctionName: SubImportValues
+      FunctionName: SubValues
       Action: lambda:InvokeFunction
       Principal: cloudformation.amazonaws.com
       SourceAccount: !Ref AWS::AccountId
 Outputs:
-  SubImportValuesArn:
-    Description: The ARN of SubImportValues
-    Value: !GetAtt SubImportValues.Arn
+  SubValuesArn:
+    Description: The ARN of SubValues
+    Value: !GetAtt SubValues.Arn
     Export:
-      Name: SubImportValues-Arn
+      Name: SubValues-Arn

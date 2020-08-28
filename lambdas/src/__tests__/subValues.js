@@ -1,4 +1,4 @@
-const lambda = require("../subImportValues");
+const lambda = require("../subValues");
 const response = require("cfn-response-promise");
 
 jest.mock("cfn-response-promise", () => ({
@@ -36,7 +36,8 @@ describe("handler", () => {
   it("should call response.send with SUCCESS when event.ResourceProperties.Value is defined and import values are valid", async () => {
     const event = {
       ResourceProperties: {
-        Value: "${Import::Name-One} ${Import::Name-One} ${Import::Name-Three}",
+        Value: "${Import::Name-One} ${Import::Name-One} ${Import::Name-Three} ${NameFour}",
+        NameFour: "Value Four"
       },
     };
     await lambda.handler(event, null);
@@ -47,9 +48,9 @@ describe("handler", () => {
       null,
       "SUCCESS",
       {
-        Plaintext: "Value One Value One Value Three",
+        Plaintext: "Value One Value One Value Three Value Four",
       },
-      "Value One Value One Value Three"
+      "Value One Value One Value Three Value Four"
     );
   });
 });

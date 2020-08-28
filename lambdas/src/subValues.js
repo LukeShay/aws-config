@@ -9,25 +9,31 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    let resourceValue = event.ResourceProperties.Value;
-    const exports = await cloudformation.listExports().promise();
+    let { Value: resourceValue } = event.ResourceProperties;
+    const exports = await (await cloudformation.listExports().promise())
+      .Exports;
+
     const exportsObject = {};
 
-    exports.Exports.forEach((value) => {
+    exports.forEach((value) => {
       exportsObject[value.Name] = value.Value;
     });
 
-    const imports = resourceValue.match(/\${Import::[^}]+}/g);
+    const subs = resourceValue.match(/\${[^}]+}/g);
 
-    console.log(`Imported values: ${imports}`);
+    console.log(`Sub values: ${subs}`);
 
-    imports.forEach((value) => {
-      const exportName = value.replace("${Import::", "").replace("}", "");
-      if (!exportName) throw "";
+    subs.forEach((value) => {
+      const subName = value.replace(/(\${(Import::)?|})?/g, "");
+      if (!subName) throw "";
 
       resourceValue = resourceValue
         .split(value)
-        .join(exportsObject[exportName]);
+        .join(
+          value.includes("${Import::")
+            ? exportsObject[subName]
+            : event.ResourceProperties[subName]
+        );
     });
 
     await response.send(
