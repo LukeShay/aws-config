@@ -27,18 +27,3 @@ Resources:
       Threshold: !Ref SpendingAlarmThreshold
       ComparisonOperator: GreaterThanOrEqualToThreshold
       AlarmActions: [!Ref AlarmSNSTopic]
-  TestCustom:
-    Type: Custom::TestCustom
-    Properties:
-      ServiceToken: !ImportValue SubValues-Arn
-      Value: "${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIUrl} ${Import::CanvasV2-api-APIID} ${SpendingAlarmThreshold}"
-      SpendingAlarmThreshold: !Ref SpendingAlarmThreshold
-Outputs:
-  SubValues:
-    Description: SubValues test
-    Value:
-      Fn::Sub:
-        - !GetAtt TestCustom.Plaintext
-  SubValuesRef:
-    Description: SubValues test
-    Value: !Ref TestCustom
