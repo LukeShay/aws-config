@@ -124,8 +124,8 @@ jobs:
                 --stack-name $STACK_NAME \
                 --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
-  update-lambdas-stack:
-    name: Deploy Lambdas CloudFormation stack
+  update-networking-stack:
+    name: Deploy Networking CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
@@ -265,7 +265,7 @@ jobs:
                 --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
   update-ltp-networking-stack:
-    name: Deploy LTP Lambdas CloudFormation stack
+    name: Deploy LTP Networking CloudFormation stack
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     env:
