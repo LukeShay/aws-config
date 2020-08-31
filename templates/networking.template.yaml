@@ -1,0 +1,306 @@
+Description: CloudFormation template for initializing AWS networking
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  VPCLogRetentionPeriod:
+    Description: Number of days to retain VPC flow logs
+    Type: Number
+    Default: 14
+Resources:
+  PublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public security group that allows inbound connections from anywhere. Use only for public facing components
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
+  DefaultSecurityGroupIngressRule:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      SourceSecurityGroupName:
+        !Ref PublicSecurityGroup
+      FromPort: 0
+      ToPort: 65535
+      GroupName: default
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+  VpcIpv6Block:
+    Type: AWS::EC2::VPCCidrBlock
+    Properties:
+      AmazonProvidedIpv6CidrBlock: true
+      VpcId: !Ref VPC
+  VPCFlowLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: !Ref VPCLogRetentionPeriod
+  VPCFlowLogger:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+  VPCFlowLoggerPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Roles:
+        - !Ref VPCFlowLogger
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - logs:DescribeLogGroups
+              - logs:DescribeLogStreams
+            Resource: !GetAtt VPCFlowLogGroup.Arn
+  VPCFlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      DeliverLogsPermissionArn: !GetAtt VPCFlowLogger.Arn
+      LogGroupName: !Ref VPCFlowLogGroup
+      ResourceId: !Ref VPC
+      ResourceType: VPC
+      TrafficType: REJECT
+  PublicNetGateway:
+    Type: AWS::EC2::InternetGateway
+  PublicNetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref PublicNetGateway
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+  InternetRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref PublicNetGateway
+  Ipv6InternetRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationIpv6CidrBlock: ::/0
+      GatewayId: !Ref PublicNetGateway
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    DependsOn: VpcIpv6Block
+    Properties:
+      VpcId: !Ref VPC
+      AssignIpv6AddressOnCreation: true
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: !Ref AWS::Region
+      CidrBlock:
+        Fn::Select:
+          - 0
+          - !Cidr [!GetAtt VPC.CidrBlock, 4, 14]
+      Ipv6CidrBlock:
+        Fn::Select:
+          - 0
+          - !Cidr [!Select [0, !GetAtt VPC.Ipv6CidrBlocks], 4, 64]
+  Subnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet1
+      RouteTableId: !Ref RouteTable
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    DependsOn: VpcIpv6Block
+    Properties:
+      VpcId: !Ref VPC
+      AssignIpv6AddressOnCreation: true
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: !Ref AWS::Region
+      CidrBlock:
+        Fn::Select:
+          - 1
+          - !Cidr [!GetAtt VPC.CidrBlock, 4, 14]
+      Ipv6CidrBlock:
+        Fn::Select:
+          - 1
+          - !Cidr [!Select [0, !GetAtt VPC.Ipv6CidrBlocks], 4, 64]
+  Subnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet2
+      RouteTableId: !Ref RouteTable
+  Subnet3:
+    Type: AWS::EC2::Subnet
+    DependsOn: VpcIpv6Block
+    Properties:
+      VpcId: !Ref VPC
+      AssignIpv6AddressOnCreation: true
+      AvailabilityZone:
+        Fn::Select:
+          - 2
+          - Fn::GetAZs: !Ref AWS::Region
+      CidrBlock:
+        Fn::Select:
+          - 2
+          - !Cidr [!GetAtt VPC.CidrBlock, 4, 14]
+      Ipv6CidrBlock:
+        Fn::Select:
+          - 2
+          - !Cidr [!Select [0, !GetAtt VPC.Ipv6CidrBlocks], 4, 64]
+  Subnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet3
+      RouteTableId: !Ref RouteTable
+  Subnet4:
+    Type: AWS::EC2::Subnet
+    DependsOn: VpcIpv6Block
+    Properties:
+      VpcId: !Ref VPC
+      AssignIpv6AddressOnCreation: true
+      AvailabilityZone:
+        Fn::Select:
+          - 3
+          - Fn::GetAZs: !Ref AWS::Region
+      CidrBlock:
+        Fn::Select:
+          - 3
+          - !Cidr [!GetAtt VPC.CidrBlock, 4, 14]
+      Ipv6CidrBlock:
+        Fn::Select:
+          - 3
+          - !Cidr [!Select [0, !GetAtt VPC.Ipv6CidrBlocks], 4, 64]
+  Subnet4RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet4
+      RouteTableId: !Ref RouteTable
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Database subnet group for the primary VPC
+      SubnetIds:
+        - !Ref Subnet1
+        - !Ref Subnet2
+        - !Ref Subnet3
+        - !Ref Subnet4
+  PrivateDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Private/vpc access to mysql/aurora instances
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 10.0.0.0/8
+      VpcId: !Ref VPC
+  PublicDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public access to mysql/aurora instances
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+  HttpSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows http and https traffic
+      SecurityGroupIngress:
+        # Ipv4
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        # Ipv6
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIpv6: ::/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIpv6: ::/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIpv6: ::/0
+      VpcId: !Ref VPC
+Outputs:
+  PublicSecurityGroupId:
+    Description: GroupId for the public security group
+    Value: !GetAtt PublicSecurityGroup.GroupId
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSecurityGroupId"
+  PublicSecurityGroupName:
+    Description: GroupName for the public security group
+    Value: !Ref PublicSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSecurityGroupName"
+  VpcId:
+    Description: ID of the primary VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${AWS::StackName}-VpcId
+  VpcSecurityGroup:
+    Description: Group of the primary VPC
+    Value: !GetAtt VPC.DefaultSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-VpcSecurityGroup
+  SubnetIds:
+    Description: Comma-delimited list of subnet IDs
+    Value: !Join
+      - ","
+      - - !Ref Subnet1
+        - !Ref Subnet2
+        - !Ref Subnet3
+        - !Ref Subnet4
+    Export:
+      Name: !Sub ${AWS::StackName}-SubnetIds
+  RouteTableId:
+    Description: ID of the route table the primary VPC uses
+    Value: !Ref RouteTable
+    Export:
+      Name: !Sub ${AWS::StackName}-RouteTableId
+  DBSubnetGroupName:
+    Description: Name of the database subnet group for the primary VPC
+    Value: !Ref DatabaseSubnetGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-DBSubnetGroupName
+  PrivateDBSecurityGroupId:
+    Description: ID of the security group allowing private access to mysql/aurora instances
+    Value: !GetAtt PrivateDBSecurityGroup.GroupId
+    Export:
+      Name: !Sub ${AWS::StackName}-PrivateDBSecurityGroupId
+  PublicDBSecurityGroupId:
+    Description: ID of the security group allowing public access to mysql/aurora instances
+    Value: !GetAtt PublicDBSecurityGroup.GroupId
+    Export:
+      Name: !Sub ${AWS::StackName}-PublicDBSecurityGroupId
+  HttpSecurityGroupId:
+    Description: ID of the security group allowing http and https traffic
+    Value: !GetAtt HttpSecurityGroup.GroupId
+    Export:
+      Name: !Sub ${AWS::StackName}-HttpSecurityGroupId

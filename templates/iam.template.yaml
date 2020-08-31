@@ -1,4 +1,5 @@
 Description: CloudFormation template for initializing AWS IAM
+AWSTemplateFormatVersion: "2010-09-09"
 Resources:
   AdminUserGroup:
     Type: AWS::IAM::Group

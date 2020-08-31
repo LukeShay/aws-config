@@ -124,6 +124,34 @@ jobs:
                 --stack-name $STACK_NAME \
                 --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
                 --no-fail-on-empty-changeset
+  update-lambdas-stack:
+    name: Deploy Lambdas CloudFormation stack
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    env:
+      TEMPLATE: templates/networking.template.yaml
+      PACKAGED_TEMPLATE: networking.template.yaml.packaged
+      STACK_NAME: AWSAccountNetworkingConfig
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Packaging $STACK_NAME
+        run: |
+              aws cloudformation package --template-file $TEMPLATE \
+                --s3-bucket lukeshay-build-bucket \
+                --output-template-file  $PACKAGED_TEMPLATE
+      - name: Deploying $STACK_NAME
+        run: |
+              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+                --stack-name $STACK_NAME \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+                --no-fail-on-empty-changeset
   update-ltp-iam-stack:
     name: Deploy LTP IAM CloudFormation stack
     if: github.ref == 'refs/heads/master'
@@ -216,6 +244,34 @@ jobs:
       TEMPLATE: templates/lambdas.template.yaml
       PACKAGED_TEMPLATE: lambdas.template.yaml.packaged
       STACK_NAME: AWSAccountLambdas
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Packaging $STACK_NAME
+        run: |
+              aws cloudformation package --template-file $TEMPLATE \
+                --s3-bucket luketyler-build-bucket \
+                --output-template-file $PACKAGED_TEMPLATE
+      - name: Deploying $STACK_NAME
+        run: |
+              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+                --stack-name $STACK_NAME \
+                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+                --no-fail-on-empty-changeset
+  update-ltp-networking-stack:
+    name: Deploy LTP Lambdas CloudFormation stack
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    env:
+      TEMPLATE: templates/networking.template.yaml
+      PACKAGED_TEMPLATE: networking.template.yaml.packaged
+      STACK_NAME: AWSAccountNetworkingConfig
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
