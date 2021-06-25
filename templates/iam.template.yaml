@@ -54,12 +54,24 @@ Outputs:
   AdminUserGroup:
     Description: "Admin user group ARN."
     Value: !Ref AdminUserGroup
+    Export:
+      Name:
+        "Fn::Sub": "${AWS::StackName}-AdminUserGroup"
   ReadOnlyUserGroup:
     Description: "Read only user group ARN."
     Value: !Ref ReadOnlyUserGroup
+    Export:
+      Name:
+        "Fn::Sub": "${AWS::StackName}-ReadOnlyUserGroup"
   CloudformationUserGroup:
     Description: "Cloudformation user group ARN."
     Value: !Ref CloudformationUserGroup
+    Export:
+      Name:
+        "Fn::Sub": "${AWS::StackName}-CloudformationUserGroup"
   PowerUserUserGroup:
     Description: "Power user user group ARN."
     Value: !Ref PowerUserUserGroup
+    Export:
+      Name:
+        "Fn::Sub": "${AWS::StackName}-PowerUserUserGroup"

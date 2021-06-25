@@ -1,0 +1,17 @@
+Description: CloudFormation template for creating users using AWS IAM
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  DefaultPassword:
+    Description: "The default password for new users."
+    Type: String
+    NoEcho: true
+Resources:
+  LukeShayUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: lukeshay
+      Groups:
+        - !ImportValue IAMConfig-AdminUserGroup
+      LoginProfile:
+        Password: !Ref DefaultPassword
+        PasswordResetRequired: true
