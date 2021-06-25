@@ -1,0 +1,15 @@
+regions:
+- us-east-1
+- us-east-2
+- us-west-1
+- us-west-2
+- global
+
+account-blacklist:
+- "999999999999"
+
+accounts:
+  "835072105133": {}
+  "816188110262": {}
+  "467268748732": {}
+  "586049821688": {}

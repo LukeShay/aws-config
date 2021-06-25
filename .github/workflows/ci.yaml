@@ -12,293 +12,293 @@ jobs:
         uses: scottbrenner/cfn-lint-action@master
         with:
           args: "templates/**/*.yaml"
-  update-iam-stack:
-    name: Deploy IAM CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/iam.template.yaml
-      PACKAGED_TEMPLATE: iam.template.yaml.packaged
-      STACK_NAME: AWSAccountIAMConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-password-policy-stack:
-    name: Deploy Password Policy CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/password.template.yaml
-      PACKAGED_TEMPLATE: password.template.yaml.packaged
-      STACK_NAME: AWSAccountPasswordPolicyConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-alarms-stack:
-    name: Deploy Alarms CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/alarms.template.yaml
-      PACKAGED_TEMPLATE: alarms.template.yaml.packaged
-      STACK_NAME: AWSAccountAlarmsConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-lambdas-stack:
-    name: Deploy Lambdas CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/lambdas.template.yaml
-      PACKAGED_TEMPLATE: lambdas.template.yaml.packaged
-      STACK_NAME: AWSAccountLambdas
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-networking-stack:
-    name: Deploy Networking CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/networking.template.yaml
-      PACKAGED_TEMPLATE: networking.template.yaml.packaged
-      STACK_NAME: AWSAccountNetworkingConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-ltp-iam-stack:
-    name: Deploy LTP IAM CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/iam.template.yaml
-      PACKAGED_TEMPLATE: iam.template.yaml.packaged
-      STACK_NAME: AWSAccountIAMConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-ltp-password-policy-stack:
-    name: Deploy LTP Password Policy CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/password.template.yaml
-      PACKAGED_TEMPLATE: password.template.yaml.packaged
-      STACK_NAME: AWSAccountPasswordPolicyConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-ltp-alarms-stack:
-    name: Deploy LTP Alarms CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/alarms.template.yaml
-      PACKAGED_TEMPLATE: alarms.template.yaml.packaged
-      STACK_NAME: AWSAccountAlarmsConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket lukeshay-build-bucket \
-                --output-template-file  $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-ltp-lambdas-stack:
-    name: Deploy LTP Lambdas CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/lambdas.template.yaml
-      PACKAGED_TEMPLATE: lambdas.template.yaml.packaged
-      STACK_NAME: AWSAccountLambdas
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket luketyler-build-bucket \
-                --output-template-file $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
-  update-ltp-networking-stack:
-    name: Deploy LTP Networking CloudFormation stack
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    env:
-      TEMPLATE: templates/networking.template.yaml
-      PACKAGED_TEMPLATE: networking.template.yaml.packaged
-      STACK_NAME: AWSAccountNetworkingConfig
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Packaging $STACK_NAME
-        run: |
-              aws cloudformation package --template-file $TEMPLATE \
-                --s3-bucket luketyler-build-bucket \
-                --output-template-file $PACKAGED_TEMPLATE
-      - name: Deploying $STACK_NAME
-        run: |
-              aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
-                --stack-name $STACK_NAME \
-                --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
-                --no-fail-on-empty-changeset \
-                --tags Application=AccountConfig
+  # update-iam-stack:
+  #   name: Deploy IAM CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/iam.template.yaml
+  #     PACKAGED_TEMPLATE: iam.template.yaml.packaged
+  #     STACK_NAME: AWSAccountIAMConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-password-policy-stack:
+  #   name: Deploy Password Policy CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/password.template.yaml
+  #     PACKAGED_TEMPLATE: password.template.yaml.packaged
+  #     STACK_NAME: AWSAccountPasswordPolicyConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-alarms-stack:
+  #   name: Deploy Alarms CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/alarms.template.yaml
+  #     PACKAGED_TEMPLATE: alarms.template.yaml.packaged
+  #     STACK_NAME: AWSAccountAlarmsConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-lambdas-stack:
+  #   name: Deploy Lambdas CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/lambdas.template.yaml
+  #     PACKAGED_TEMPLATE: lambdas.template.yaml.packaged
+  #     STACK_NAME: AWSAccountLambdas
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-networking-stack:
+  #   name: Deploy Networking CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/networking.template.yaml
+  #     PACKAGED_TEMPLATE: networking.template.yaml.packaged
+  #     STACK_NAME: AWSAccountNetworkingConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-ltp-iam-stack:
+  #   name: Deploy LTP IAM CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/iam.template.yaml
+  #     PACKAGED_TEMPLATE: iam.template.yaml.packaged
+  #     STACK_NAME: AWSAccountIAMConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-ltp-password-policy-stack:
+  #   name: Deploy LTP Password Policy CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/password.template.yaml
+  #     PACKAGED_TEMPLATE: password.template.yaml.packaged
+  #     STACK_NAME: AWSAccountPasswordPolicyConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-ltp-alarms-stack:
+  #   name: Deploy LTP Alarms CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/alarms.template.yaml
+  #     PACKAGED_TEMPLATE: alarms.template.yaml.packaged
+  #     STACK_NAME: AWSAccountAlarmsConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket lukeshay-build-bucket \
+  #               --output-template-file  $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-ltp-lambdas-stack:
+  #   name: Deploy LTP Lambdas CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/lambdas.template.yaml
+  #     PACKAGED_TEMPLATE: lambdas.template.yaml.packaged
+  #     STACK_NAME: AWSAccountLambdas
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket luketyler-build-bucket \
+  #               --output-template-file $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig
+  # update-ltp-networking-stack:
+  #   name: Deploy LTP Networking CloudFormation stack
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TEMPLATE: templates/networking.template.yaml
+  #     PACKAGED_TEMPLATE: networking.template.yaml.packaged
+  #     STACK_NAME: AWSAccountNetworkingConfig
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.LTP_AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.LTP_AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     - name: Packaging $STACK_NAME
+  #       run: |
+  #             aws cloudformation package --template-file $TEMPLATE \
+  #               --s3-bucket luketyler-build-bucket \
+  #               --output-template-file $PACKAGED_TEMPLATE
+  #     - name: Deploying $STACK_NAME
+  #       run: |
+  #             aws cloudformation deploy --template-file $PACKAGED_TEMPLATE \
+  #               --stack-name $STACK_NAME \
+  #               --capabilities CAPABILITY_NAMED_IAM CAPABILITY_IAM \
+  #               --no-fail-on-empty-changeset \
+  #               --tags Application=AccountConfig

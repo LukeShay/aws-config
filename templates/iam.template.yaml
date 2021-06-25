@@ -7,10 +7,10 @@ Resources:
       GroupName: AdminUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
-  StandardUserGroup:
+  PowerUserUserGroup:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: StandardUserGroup
+      GroupName: PowerUserUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
   ReadOnlyUserGroup:
@@ -19,33 +19,21 @@ Resources:
       GroupName: ReadOnlyUserGroup
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
-  NonAdminUserPolicy:
-    Type: AWS::IAM::Policy
+  CloudformationUserGroup:
+    Type: AWS::IAM::Group
     Properties:
-      PolicyName: NonAdminUserPolicy
-      Groups:
-        - !Ref ReadOnlyUserGroup
-        - !Ref StandardUserGroup
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Deny
-            Resource: "*"
-            Action:
-              - aws-portal:*
-              - cur:*
-              - budgets:*
-              - ce:*
-              - pricing:*
-              - purchase-orders:*
+      GroupName: CloudformationUserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
   CommonUserPolicy:
     Type: AWS::IAM::Policy
     Properties:
       PolicyName: NonAdminUserPolicy
       Groups:
         - !Ref ReadOnlyUserGroup
-        - !Ref StandardUserGroup
+        - !Ref PowerUserUserGroup
         - !Ref AdminUserGroup
+        - !Ref CloudformationUserGroup
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -53,39 +41,6 @@ Resources:
             Resource: "*"
             Action:
               - iam:ChangePassword
-  GithubUserGroup:
-    Type: AWS::IAM::Group
-    Properties:
-      GroupName: GithubUserGroup
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
-        - arn:aws:iam::aws:policy/AWSLambdaFullAccess
-        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
-        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
-  LukeShay:
-    Type: AWS::IAM::User
-    Properties:
-      UserName: lukeshay
-      Groups:
-        - !Ref AdminUserGroup
-      LoginProfile:
-        Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
-        PasswordResetRequired: true
-  TylerKrueger:
-    Type: AWS::IAM::User
-    Properties:
-      UserName: tylerkrueger
-      Groups:
-        - !Ref ReadOnlyUserGroup
-      LoginProfile:
-        Password: "{{resolve:secretsmanager:DefaultUserPassword:SecretString:DefaultUserPassword}}"
-        PasswordResetRequired: true
-  GithubUser:
-    Type: AWS::IAM::User
-    Properties:
-      UserName: github-user
-      Groups:
-        - !Ref GithubUserGroup
 Outputs:
   TemplateID:
     Description: "Template id."
@@ -96,3 +51,15 @@ Outputs:
   StackName:
     Description: "Stack name."
     Value: !Sub "${AWS::StackName}"
+  AdminUserGroup:
+    Description: "Admin user group ARN."
+    Value: !Ref AdminUserGroup
+  ReadOnlyUserGroup:
+    Description: "Read only user group ARN."
+    Value: !Ref ReadOnlyUserGroup
+  CloudformationUserGroup:
+    Description: "Cloudformation user group ARN."
+    Value: !Ref CloudformationUserGroup
+  PowerUserUserGroup:
+    Description: "Power user user group ARN."
+    Value: !Ref PowerUserUserGroup
